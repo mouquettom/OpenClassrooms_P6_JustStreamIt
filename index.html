@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JustStreamIt</title>
+    <link href="styles/style.css" rel="stylesheet">
+    <script src="scripts/script.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <img src="https://user.oc-static.com/upload/2020/09/18/16004298163529_P5.png" alt="JustStreamIt Logo">
+        </div>
+        <h1>Stream What You Love</h1>
+    </header>
+
+    <main>
+        <section class="best-movie">
+            <h2>Best movie</h2>
+            <div class="movie-card">
+                <img src="https://m.media-amazon.com/images/M/MV5BMjIxMjgxNTk0MF5BMl5BanBnXkFtZTgwNjIyOTg2MDE@._V1_UX182_CR0,0,182,268_AL_.jpg"
+                     alt="The Wolf of Wall Street">
+                <div>
+                    <h3>The Wolf of Wall Street</h3>
+                    <p>
+                        Based on the true story of Jordan Belfort, from his rise to a wealthy stock-broker
+                        living the high life to his fall involving crime, corruption and the federal
+                        government.
+                    </p>
+                    <button class="details-btn" data-id="993846">Details</button>
+                </div>
+            </div>
+        </section>
+
+        <div id="modal_window" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div class="modal-header">
+                    <div class="movie-info">
+                        <h3 id="modal_title"></h3>
+                        <p><strong>Year :</strong> <span id="modal_year"></span></p>
+                        <p><strong>Genre :</strong> <span id="modal_genre"></span></p>
+                        <p><strong>Duration :</strong> <span id="modal_duration"></span></p>
+                        <p><strong>IMDB Score :</strong> <span id="modal_score"></span></p>
+                        <p><strong>Directors :</strong> <span id="modal_director"></span></p>
+                    </div>
+                    <div class="modal-image">
+                        <img id="imgfilm" src="" alt="">
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <p><strong><br>Description :</strong></p>
+                    <p><span id="modal_description"></span></p>
+                    <p><strong><br>Actors :</strong></p>
+                    <p><span id="modal_cast"></span></p>
+                </div>
+                <div>
+                    <button id="close_modal">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <section>
+            <h2>Sci-Fi</h2>
+            <div class="categories">
+                <div class="movie-grid" id="sci-fi_movies">
+                    <!-- Les films seront chargés ici -->
+                </div>
+            </div>
+            <div class="carousel-controls">
+                <button id="prev-sci-fi" class="carousel-btn">&#x25C0;</button>
+                <button id="next-sci-fi" class="carousel-btn">&#x25B6;</button>
+            </div>
+        </section>
+
+        <section>
+            <h2>Comedy</h2>
+            <div class="categories">
+                <div class="movie-grid" id="comedy_movies">
+                    <!-- Les films seront chargés ici -->
+                </div>
+            </div>
+            <div class="carousel-controls">
+                <button id="prev-comedy" class="carousel-btn">&#x25C0;</button>
+                <button id="next-comedy" class="carousel-btn">&#x25B6;</button>
+            </div>
+        </section>
+
+        <section class="filters">
+            <label>Others categories</label>
+            <select id="genre_select">
+                <option>Action</option>
+                <option>Adult</option>
+                <option>Adventure</option>
+                <option>Animation</option>
+                <option>Biography</option>
+                <option>Comedy</option>
+                <option>Crime</option>
+                <option>Documentary</option>
+                <option>Drama</option>
+                <option>Family</option>
+                <option>Fantasy</option>
+                <option>Film-Noir</option>
+                <option>History</option>
+                <option>Horror</option>
+                <option>Music</option>
+                <option>Musical</option>
+                <option>Mystery</option>
+                <option>News</option>
+                <option>Reality-TV</option>
+                <option>Romance</option>
+                <option>Sci-Fi</option>
+                <option>Sport</option>
+                <option>Thriller</option>
+                <option>War</option>
+                <option>Western</option>
+            </select>
+        </section>
+
+        <section id="selected-category-section">
+            <!-- H2 pour le titre de la catégorie -->
+            <h2 id="selected-category-title"></h2>
+
+            <div id="list_film"></div>
+            <!-- Les films seront chargés ici -->
+
+            <div class="selected-carousel-controls">
+                <button id="prev-selected" class="carousel-btn">&#x25C0;</button>
+                <button id="next-selected" class="carousel-btn">&#x25B6;</button>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        @JustStreamIt
+    </footer>
+</body>
+
+</html>
