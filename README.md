@@ -15,29 +15,40 @@ et compatible avec les navigateurs les plus utilisés. Le site récupère les do
 Le site récupère les données des films à partir de l’API. Pour que ces données 
 soient affichées, il est indispensable de lancer le serveur API en local.
 
-1. **Cloner le dépôt pour accéder à l'API OCMovies-API :**
+1. **Installer et exécuter l'API OCMovies-API en local :**
 
     Ouvrez votre terminal, rendez-vous dans le dossier de votre choix et clonez 
     le dépôt Git avec la commande :
     ```
     git clone https://github.com/OpenClassrooms-Student-Center/OCMovies-API-EN-FR.git
     ```
-    
-    Rendez-vous dans le dossier OCMovies-API-EN-FR, puis créez un nouvel environnement virtuel :
-    
-    ### Windows:
+
+    Naviguer dans le répertoire :
     ```
-    env\scripts\activate.bat
+    cd ocmovies-api-fr
     ```
-    ### Linux:
+    Créer un environnement virtuel :
+    ### Sous Windows :
     ```
+    python -m venv env
+    env\Scripts\activate
+    ```
+    ### Sous macOS/Linux :
+    ```
+    python3 -m venv env
     source env/bin/activate
     ```
-    Ensuite, activez-le.
-
-    Exécutez la commande suivante dans votre terminal pour lancer le serveur :
+    Installer les dépendances :
     ```
-    python3 manage.py runserver
+    pip install -r requirements.txt
+    ```
+    Créer et alimenter la base de données :
+    ```
+    python manage.py create_db
+    ```
+    Démarrer le serveur :
+    ```
+    python manage.py runserver   
     ```
 
 2. **Cloner le dépôt du projet :**
@@ -49,7 +60,7 @@ soient affichées, il est indispensable de lancer le serveur API en local.
 
 3. **Lancer l’application :**
 
-    Vous pouvez dorénavant ouvrir le fichier index.html directement dans votre navigateur.
+    Vous pouvez naviguer dans le dossier et ouvrir le fichier index.html directement dans votre navigateur.
 
 
 ## Structure du Projet
