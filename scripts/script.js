@@ -1,16 +1,25 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+    // ----------------------------
+    // Gestion du modal et de la navigation
+    // ----------------------------
+
     const modalWindow = document.getElementById("modal_window");
     const closeModalBtn = document.getElementById("close_modal");
     const closeModalSpan = document.querySelector(".close");
     const modalImg = document.getElementById("imgfilm");
 
+    // Sélecteurs pour le grid de films et le select de genres
     const movieGrid = document.getElementById("list_film");
     const genreSelect = document.getElementById("genre_select");
     const titreGenre = document.getElementById("titre_genre");
 
     const sciFiMovies = document.getElementById("sci-fi_movies");
     const comedyMovies = document.getElementById("comedy_movies");
+
+    // ----------------------------
+    // Fonctions pour le modal
+    // ----------------------------
 
     async function fetchMovieDetails(movieId) {
         try {
@@ -69,9 +78,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Chargement des films pour le select genre
-    async function loadMoviesByGenre(genre, targetDiv) {
+    // ----------------------------
+    // Chargement des films par genre
+    // ----------------------------
 
+    async function loadMoviesByGenre(genre, targetDiv) {
         const apiUrlPage1 = `http://localhost:8000/api/v1/titles/?genre=${genre}&page=1`;
         const apiUrlPage2 = `http://localhost:8000/api/v1/titles/?genre=${genre}&page=2`;
 
@@ -137,8 +148,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // Chargement initial pour le select de genre
     loadMoviesByGenre(genreSelect.value, movieGrid);
 
-    // Pour le carrousel, nous définissons une fonction dédiée qui gère la pagination.
-    // Elle utilise l'URL avec le paramètre page et met à jour l'affichage.
+    // ----------------------------
+    // Gestion du carrousel pour la catégorie sélectionnée
+    // ----------------------------
+
     async function loadMoviesCarousel(genre, targetDiv, page) {
         const apiUrl = `http://localhost:8000/api/v1/titles/?genre=${genre}&page=${page}`;
         try {
@@ -146,18 +159,15 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = await response.json();
             let movies = data.results;
 
-            // Si le nombre de films est inférieur à 6, récupérer des films supplémentaires depuis la page suivante
             if (movies.length < 6) {
                 const nextPage = page + 1;
                 const response2 = await fetch(`http://localhost:8000/api/v1/titles/?genre=${genre}&page=${nextPage}`);
                 const data2 = await response2.json();
-                // Ajouter les films de la page suivante jusqu'à atteindre 6 films (si disponibles)
                 while (movies.length < 6 && data2.results.length > 0) {
                     movies.push(data2.results.shift());
                 }
             }
 
-            // Si aucun film n'est disponible, afficher un message et désactiver le bouton "Suivant"
             if (!movies || movies.length === 0) {
                 targetDiv.innerHTML = '<p>Aucun film disponible pour cette catégorie.</p>';
                 const nextBtn = document.getElementById(`next-${genre}`);
@@ -167,7 +177,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 const nextBtn = document.getElementById(`next-${genre}`);
                 if (nextBtn) nextBtn.disabled = false;
             }
-            // Désactiver le bouton "Précédent" si on est sur la première page
             const prevBtn = document.getElementById(`prev-${genre}`);
             if (prevBtn) {
                 prevBtn.disabled = (page === 1);
@@ -177,11 +186,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    function updateCarouselMovies(movies, targetDiv, titleText = "") {
-        // Effacer le contenu précédent
+    function updateCarouselMovies(movies, targetDiv) {
         targetDiv.innerHTML = "";
 
-        // Créer la grille des films
         const movieGridContainer = document.createElement("div");
         movieGridContainer.classList.add("movie-grid");
 
@@ -197,19 +204,15 @@ document.addEventListener("DOMContentLoaded", () => {
         targetDiv.appendChild(movieGridContainer);
     }
 
-    // Variables pour suivre la page du carrousel de la catégorie sélectionnée
     let currentPageSelected = 1;
 
     async function loadSelectedCategoryCarousel(genre, targetDiv, page) {
-        // Convertir le genre en minuscules pour correspondre à l’API
-        const genreParam = genre.toLowerCase();
         const apiUrl = `http://localhost:8000/api/v1/titles/?genre=${genre}&page=${page}`;
         try {
             const response = await fetch(apiUrl);
             const data = await response.json();
             let movies = data.results;
 
-            // Si moins de 6 films sont retournés, compléter avec la page suivante
             if (movies.length < 6) {
                 const nextPage = page + 1;
                 const response2 = await fetch(`http://localhost:8000/api/v1/titles/?genre=${genre}&page=${nextPage}`);
@@ -219,37 +222,31 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
 
-            // Mettre à jour le <h2> au-dessus des boutons
             const selectedCategoryTitle = document.getElementById("selected-category-title");
             if (selectedCategoryTitle) {
-                // On affiche le genre tel qu'il apparaît dans le select (avec la casse d'origine)
                 selectedCategoryTitle.textContent = genre;
             }
 
-            // Gestion de l'affichage
             if (!movies || movies.length === 0) {
                 targetDiv.innerHTML = '<p>Aucun film disponible pour cette catégorie.</p>';
                 document.getElementById("next-selected").disabled = true;
             } else {
-                updateCarouselMovies(movies.slice(0, 6), targetDiv, genre);
+                updateCarouselMovies(movies.slice(0, 6), targetDiv);
                 document.getElementById("next-selected").disabled = false;
             }
 
-            // Désactiver le bouton "Précédent" sur la première page
             document.getElementById("prev-selected").disabled = (page === 1);
         } catch (error) {
             console.error("Erreur lors de la récupération des films :", error);
         }
     }
 
-    // Gestion des boutons pour la catégorie sélectionnée
     const nextSelectedBtn = document.getElementById("next-selected");
     const prevSelectedBtn = document.getElementById("prev-selected");
     const selectedDiv = document.getElementById("list_film");
 
     nextSelectedBtn.addEventListener("click", () => {
         currentPageSelected++;
-        // Ici, on récupère la valeur du genre sélectionné dans le select
         loadSelectedCategoryCarousel(genreSelect.value, selectedDiv, currentPageSelected);
     });
     prevSelectedBtn.addEventListener("click", () => {
@@ -259,26 +256,20 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Lorsque l'utilisateur change la catégorie via le select, réinitialiser la page et charger le carrousel
     genreSelect.addEventListener("change", () => {
         currentPageSelected = 1;
         loadSelectedCategoryCarousel(genreSelect.value, selectedDiv, currentPageSelected);
     });
 
-    // Chargement initial de la catégorie sélectionnée au démarrage (ici Action par défaut)
     loadSelectedCategoryCarousel(genreSelect.value, selectedDiv, currentPageSelected);
 
-
-    // Variables pour suivre la page courante dans le carrousel
     let currentPageSciFi = 1;
     let currentPageComedy = 1;
 
-    // Gestion du carrousel pour la catégorie "sci-fi" si les boutons existent
     if (sciFiMovies) {
         const nextSciFiBtn = document.getElementById("next-sci-fi");
         const prevSciFiBtn = document.getElementById("prev-sci-fi");
 
-        // Chargement initial du carrousel pour sci-fi
         loadMoviesCarousel("sci-fi", sciFiMovies, currentPageSciFi);
 
         if (nextSciFiBtn && prevSciFiBtn) {
@@ -295,12 +286,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Gestion du carrousel pour la catégorie "comedy" si les boutons existent
     if (comedyMovies) {
         const nextComedyBtn = document.getElementById("next-comedy");
         const prevComedyBtn = document.getElementById("prev-comedy");
 
-        // Chargement initial du carrousel pour comedy
         loadMoviesCarousel("comedy", comedyMovies, currentPageComedy);
 
         if (nextComedyBtn && prevComedyBtn) {
@@ -316,4 +305,45 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
     }
+
+    // ----------------------------
+    // Affichage dynamique du meilleur film
+    // ----------------------------
+
+    fetch("http://localhost:8000/api/v1/titles/?sort_by=-imdb_score&page_size=1")
+        .then(response => response.json())
+        .then(data => {
+            if (data.results && data.results.length > 0) {
+                const bestMovie = data.results[0];
+
+                const movieImg = document.querySelector(".best-movie .movie-card img");
+                if (movieImg) {
+                    movieImg.src = bestMovie.image_url;
+                    movieImg.alt = bestMovie.title;
+                }
+
+                const movieTitle = document.querySelector(".best-movie .movie-card h3");
+                if (movieTitle) {
+                    movieTitle.textContent = bestMovie.title;
+                }
+
+                // Pour récupérer la description complète, effectuer un appel à l'endpoint de détail du film
+                const movieDescription = document.querySelector(".best-movie .movie-card p");
+                if (movieDescription) {
+                    fetch(`http://localhost:8000/api/v1/titles/${bestMovie.id}`)
+                        .then(response => response.json())
+                        .then(movieDetail => {
+                            // Affiche la description complète
+                            movieDescription.textContent = movieDetail.description || "Description non disponible";
+                        })
+                        .catch(error => console.error("Erreur lors de la récupération de la description:", error));
+                    }
+
+                const detailsBtn = document.querySelector(".best-movie .movie-card button.details-btn");
+                if (detailsBtn) {
+                    detailsBtn.setAttribute("data-id", bestMovie.id);
+                }
+            }
+        })
+        .catch(error => console.error("Erreur lors de la récupération du meilleur film :", error));
 });
