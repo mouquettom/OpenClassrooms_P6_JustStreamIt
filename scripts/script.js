@@ -346,4 +346,52 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         })
         .catch(error => console.error("Erreur lors de la récupération du meilleur film :", error));
+
+    // ----------------------------
+    // Affichage dynamique de la catégorie Top Films
+    // ----------------------------
+
+    function displayTopMovies() {
+        // Récupérer la première page avec les films triés par score IMDb décroissant
+        fetch('http://localhost:8000/api/v1/titles/?sort_by=-imdb_score')
+            .then(response => response.json())
+            .then(data => {
+                // Exclure le premier film (affiché dans la section Best movie)
+                let topMovies = data.results.slice(1);
+                // Si on a moins de 6 films, compléter avec les films de la page 2
+                if (topMovies.length < 6) {
+                    const filmsNeeded = 6 - topMovies.length;
+                    return fetch('http://localhost:8000/api/v1/titles/?page=2&sort_by=-imdb_score')
+                        .then(response2 => response2.json())
+                        .then(data2 => {
+                            topMovies = topMovies.concat(data2.results.slice(0, filmsNeeded));
+                            return topMovies;
+                        });
+                }
+                return topMovies;
+            })
+            .then(topMovies => {
+                const container = document.getElementById("top_movies");
+                container.innerHTML = ""; // Réinitialiser le conteneur
+
+                topMovies.slice(0, 6).forEach(movie => {
+                    // Créer l'élément image pour chaque film
+                    const img = document.createElement("img");
+                    img.src = movie.image_url;
+                    img.alt = movie.title;
+                    img.setAttribute("data-id", movie.id);
+                    // Ajout de l'effet hover
+                    addHoverEffect(img);
+                    // Ajouter un écouteur pour ouvrir le modal au clic
+                    img.addEventListener("click", () => {
+                        openModal(movie.id);
+                    });
+
+                    container.appendChild(img);
+                });
+            })
+            .catch(error => console.error("Erreur lors de la récupération des Top Films :", error));
+    }
+
+    displayTopMovies();
 });

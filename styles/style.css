@@ -366,15 +366,69 @@ h3 {
         margin: 25px auto;
     }
 
+    /* Le conteneur global du modal */
     .modal-content {
-        max-width: 90%;    /* Réduit la largeur de la fenêtre sur mobile */
-        /*height: auto;      /* Supprime la hauteur fixe */
-        /* scale: 0.90; */
+        width: 90%;         /* Presque toute la largeur */
+        max-width: 600px;   /* Limite la largeur maxi */
+        height: auto;       /* Laisse le contenu s'adapter */
+        display: flex;
+        flex-direction: column; /* Empile en colonne */
+        align-items: center;    /* Centre horizontalement */
+        margin: 0 auto;         /* Centre le bloc dans la page */
+        padding: 20px;
+        box-sizing: border-box; /* Pour bien gérer les marges intérieures */
     }
 
+    /* L'en-tête du modal, qui contient le titre, l'image et le bouton close */
+    .modal-header {
+        flex-direction: column; /* Empile titre/infos et image */
+        align-items: center;    /* Centre horizontalement */
+        gap: 15px;              /* Espace entre les éléments */
+        padding: 0;             /* Réduit le padding sur mobile */
+    }
+
+    /* Le bloc d'image dans le modal */
     .modal-image img {
-        width: 80%;
-        padding-left: 50px;
+        width: 70%;
+        height: auto;          /* Respecte les proportions */
+        display: block;        /* Évite les petits espaces en ligne */
+        margin: 0 auto;
+        border-radius: 5px;    /* Coins arrondis */
+    }
+
+    /* Le bouton de fermeture (croix ou "Close") */
+    .close {
+        display: none;
+    }
+
+  /* Le bouton "Close" au centre */
+    #close_modal {
+        margin: 20px auto 0 auto; /* 20px en haut, 0 à droite, 0 en bas,  auto à gauche pour centrer */
+        display: block;
+        font-size: 16px;
+        padding: 10px 20px;
+    }
+
+    /* Le titre et les infos du film */
+    #modal_title {
+        font-size: 2.5em;
+        text-align: center;
+        margin-bottom: 8px;
+    }
+
+    .movie-info p {
+        font-size: 1em;       /* Réduit légèrement la taille du texte */
+        text-align: center;     /* Centre le texte si vous le souhaitez */
+        margin-bottom: 5px;
+    }
+
+    /* Le corps du modal (description, acteurs, etc.) */
+    .modal-body {
+        padding: 0 10px;
+        margin-top: 10px;
+        overflow-y: auto;       /* Permet le scroll si le contenu dépasse */
+        max-height: 400px;      /* Limite la hauteur */
+        text-align: justify;
     }
 }
 
